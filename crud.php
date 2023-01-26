@@ -1,3 +1,6 @@
+<?php
+include('dbh.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,6 +33,8 @@ if (isset($_POST["update_student"])){
         }else{
             //echo '<script> alert("Data NOT added")</script>';
         }
+    }catch (PDOException $err){
+        echo $err->getMessage();
     }
 }
 ?>
