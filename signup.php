@@ -13,36 +13,10 @@ include("dbh.php");
 </head>
 
 <?php
-$firstname=$lastname=$email=$course='';
-$errors=array('firstname'=>'','lastname'=>'','email'=>'','course'=>'');
+$email=$password='';
+$errors=array('email'=>'','password'=>'');
 if(isset($_POST['save'])){
-    //checking for firstname validation
-    if(empty($_POST['firstname'])){
-        $errors['firstname']='firstname cannot be empty<br/>';
-    }else{
-        $firstname=$_POST['firstname'];
-        if(!preg_match('/^[a-zA-Z\s]+$/',$firstname)){
-            $errors['firstname']='firstname must be letters and spaces only';
-        }
-    }
-    //checking for lastname validation
-    if(empty($_POST['lastname'])){
-        $errors['lastname']='lastname cannot be empty<br/>';
-    }else{
-        $lastname=$_POST['lastname'];
-        if(!preg_match('/^[a-zA-Z\s]+$/',$lastname)){
-            $errors['lastname']='lastname must be letters and spaces only';
-        }
-    }
-    //checking for course validation
-    if(empty($_POST['course'])){
-        $errors['course']='course cannot be empty<br/>';
-    }else{
-        $course=$_POST['course'];
-        if(!preg_match('/^[a-zA-Z\s]+$/',$course)){
-            $errors['course']='course must be letters and spaces only';
-        }
-    }
+    
     //checking for email validation
     if(empty($_POST['email'])){
         $errors['email']='email cannot be empty<br/>';
@@ -51,6 +25,22 @@ if(isset($_POST['save'])){
         if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
             $errors['email']='email must be a valid address';
         }
+    }
+    //checking for password validation
+    if(empty($_POST['password'])){
+        $errors['password']='password cannot be empty<br/>';
+    }else{
+        $password=$_POST['password'];
+        $uppercase = preg_match('@[A-Z]@', $password);
+$lowercase = preg_match('@[a-z]@', $password);
+$number    = preg_match('@[0-9]@', $password);
+$specialChars = preg_match('@[^\w]@', $password);
+
+if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
+    echo 'Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character.';
+}else{
+    echo 'Strong password.';
+}
     }
     if(array_filter($errors)){
         //echo 'there are errors in the form';
@@ -62,13 +52,11 @@ if(isset($_POST['save'])){
             $statement ->execute();*/
             try
             {
-                $query = "INSERT INTO sample(firstname, lastname, email, course) VALUES (:firstname,:lastname,:email,:course)";
+                $query = "INSERT INTO users (email, password) VALUES (:email,:password)";
                 $query_run = $databaseConnection ->prepare($query);
                 $data = [
-                    ':firstname' => $firstname,
-                    ':lastname' => $lastname,
                     ':email' => $email,
-                    ':course' => $course,
+                    ':password' => $password,
                 ];
                 $query_execute = $query_run-> execute($data);
                 if($query_execute){
@@ -104,17 +92,9 @@ if(isset($_POST['save'])){
   </div>
 </nav>
 <div class="col-md-4 offset-md-4">
-<h5 class="headings">Enter student details</h5>
+<h5 class="headings">Enter your details</h5>
 <form action="index.php" method="POST">
     <div class="form-group">
-        <input type="text" name="firstname" placeholder="Enter firstname" class="form-control" value="<?php echo htmlspecialchars($firstname); ?>">
-        <div class="text-danger"><?php echo $errors['firstname']; ?></div>
-        </div>
-
-        <div class="form-group">
-        <input type="text" name="lastname" placeholder="Enter lastname" class="form-control" value="<?php echo ($lastname); ?>">
-        <div class="text-danger"><?php echo $errors['lastname']; ?></div>
-        </div>
 
         <div class="form-group">
         <input type="text" name="email" placeholder="Enter email" class="form-control" value="<?php echo $email ?>">
@@ -122,10 +102,10 @@ if(isset($_POST['save'])){
         </div>
 
         <div class="form-group">
-        <input type="text" name="course" placeholder="Enter course" class="form-control" value="<?php echo $course ?>">
-        <div class="text-danger"><?php echo $errors['course']; ?></div>
+        <input type="password" name="password" placeholder="Enter password" class="form-control" value="<?php echo $password ?>">
+        <div class="text-danger"><?php echo $errors['password']; ?></div>
         </div>
-        <button name="save" class="btn btn-primary">save details</button>
+        <button name="save" class="btn btn-primary">Sign Up</button>
     </form>
     </div>
 </body>

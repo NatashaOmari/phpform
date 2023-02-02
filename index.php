@@ -95,7 +95,9 @@ if(isset($_POST['save'])){
     <div class="navbar-nav">
       <a class="nav-item nav-link active" href="index.php">Home <span class="sr-only">(current)</span></a>
       <a class="nav-item nav-link active" href="students.php">Students</a>
-      <a class="nav-item nav-link active" href="form.php">LogIn</a>
+      <a class="nav-item nav-link active" href="form.php">Register</a>
+      <a class="nav-item nav-link active" href="signup.php">SignUp</a>
+      <a class="nav-item nav-link active" href="login.php">Login</a>
       
     </div>
   </div>
